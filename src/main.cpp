@@ -44,22 +44,22 @@ static string PerformPostRequest(const map<string, string> & args) {
 int main() {
     map<string, string> args;
     string key, val;
-    string response;
+    string (*PerformRequestFunc)(const map<string, string> & args) = nullptr;
+
     while (true){
         key = GetStringFromStream("Enter name of argument or a type of request (get| post): ");
         if(key =="get"){
-            response = PerformGetRequest(args);
+            PerformRequestFunc = PerformGetRequest;
             break;
         } else if (key == "post") {
-            response = PerformPostRequest(args);
+            PerformRequestFunc = PerformPostRequest;
             break;
         }
 
         val = GetStringFromStream(string("Enter value of argument " + key + ":"));
         args[key] = val;
-
     }
 
-    cout << response << endl;
+    cout << PerformRequestFunc(args) << endl;
     return 0;
 }
